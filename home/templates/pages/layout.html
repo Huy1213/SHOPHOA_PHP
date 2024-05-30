@@ -61,11 +61,16 @@
                                 <li>
                                     <a href="{% url 'shop' %}">
                                         <span class="menu-text"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Sản phẩm</font></font></span>
+                                       
                                         <i class="fa fa-angle-down"></i>
                                     </a>
+                                   
                                     <ul class="dropdown-submenu dropdown-hover">
-                                        <li><a href="index.php?page=sanpham&id=<?php echo $l['MaLoai']; ?>"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"><?php echo $l['TenLoai'] ?></font></font></a></li>
+                                        {% for tl in item_loai %}
+                                        <li><a href=""><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{tl.TenLoai}}</font></font></a></li>
+                                        {% endfor %}
                                     </ul>
+                                   
                                 </li>               
                                 <li>
                                         <a href="{% url 'contact_us' %}">
@@ -497,7 +502,7 @@
                         <div class="col-md-6 col-custom">
                             <div class="modal-product-img">
                                 <a class="w-100" href="#">
-                                    <img class="w-100" src="{% static 'assets/images/product/large-size/1.jpg' %}" alt="Sản phẩm">
+                                    <img class="w-100" src="" alt="Sản phẩm">
                                 </a>
                             </div>
                         </div>

@@ -1,7 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from .models import SanPham, Loai
 def home(request):
-    return render(request, 'page/home.html')
+    data={
+            'item_sanpham': SanPham.objects.all(),
+            'item_loai': Loai.objects.all(),
+    }
+    return render(request, 'page/home.html',data)
 # Create your views here.
 def login(request):
     return render(request, 'page/login.html')

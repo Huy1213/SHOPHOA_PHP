@@ -48,21 +48,16 @@ Login
             <!--shop toolbar end-->
             <!-- Shop Wrapper Start -->
             <div class="row shop_wrapper grid_3">
-                <?php
-                if (isset($kq) && (count($kq) > 0)) {
-                    foreach ($kq as $sp) {
-                        $maHinh = $sp['MaSP']; // Lấy mã hình từ sản phẩm
-                        $hinhanh = get_HinhAnh($maHinh);
-                    ?>
+            
                         <div class="col-md-6 col-sm-6 col-lg-4 col-custom product-area">
                             <div class="product-item">
 
                                 <div class="single-product position-relative mr-0 ml-0">
 
                                     <div class="product-image">
-                                        <a class="d-block" href="index.php?page=chitietsanpham&id=<?php echo $sp['MaSP'] ?>">
-                                            <img src="view/assets/images/product/<?php echo $sp['HinhAnh'] ?>" alt="" class="product-image-1 w-100">
-                                            <img src="view/assets/images/product/" alt="" class="product-image-2 position-absolute w-100">
+                                        <a class="d-block" href="">
+                                            <img src="" alt="" class="product-image-1 w-100">
+                                            <img src="" alt="" class="product-image-2 position-absolute w-100">
                                         </a>
                                         <span class="onsale">
                                             <font style="vertical-align: inherit;">
