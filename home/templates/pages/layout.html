@@ -67,7 +67,7 @@
                                    
                                     <ul class="dropdown-submenu dropdown-hover">
                                         {% for tl in item_loai %}
-                                        <li><a href=""><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{tl.TenLoai}}</font></font></a></li>
+                                        <li><a href="{% url 'DSSPTheoLoai' tl.MaLoai %}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{tl.TenLoai}}</font></font></a></li>
                                         {% endfor %}
                                     </ul>
                                    

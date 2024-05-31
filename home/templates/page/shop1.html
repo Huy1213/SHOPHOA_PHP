@@ -48,7 +48,7 @@ Login
             <!--shop toolbar end-->
             <!-- Shop Wrapper Start -->
             <div class="row shop_wrapper grid_3">
-                {% for tl in item_sanpham %}
+                {% for tl in dm_sanpham %}
                         <div class="col-md-6 col-sm-6 col-lg-4 col-custom product-area">
                          
                             <div class="product-item">
@@ -167,14 +167,7 @@ Login
                         </h3>
                         <div class="sidebar-body">
                             <ul class="tags">
-                                {% for tl in item_mausac %}
-                                <li><a href="{% url 'DSSPTheoMau' tl.MaMau %}">
-                                    <font style="vertical-align: inherit;">
-                                        <font style="vertical-align: inherit;">{{tl.TenMau}}</font>
-                                    </font>
-                                </a>
-                                 </li>
-                            {% endfor %}
+                                
                             </ul>
                         </div>
                     </div>
