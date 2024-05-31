@@ -56,5 +56,9 @@ def checkout(request):
 def forgotpassword(request):
     return render(request, 'page/forgotpassword.html')
 
-def product_details(request):
-    return render(request, 'page/product_details.html')
+def product_details(request, product_id):
+    sp = SanPham.objects.get(MaSP = product_id)
+    data = {
+        'sanpham':sp
+    }
+    return render(request, 'page/product_details.html',data)

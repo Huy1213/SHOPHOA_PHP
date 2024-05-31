@@ -42,7 +42,7 @@ Forgot Password
                             <div class="swiper-wrapper" id="swiper-wrapper-10e5ca85ba4a0a182" aria-live="polite" style="transform: translate3d(0px, 0px, 0px);">
                                 <div class="swiper-slide swiper-slide-active" role="group" aria-label="1/6" style="width: 470px; margin-right: 10px;">
                                     <a class="w-100" href="view/assets/images/product/large-size/1.jpg">
-                                        <img class="w-100" src="view/assets/images/product/<?php echo $sanpham[0]['HinhAnh']?>" alt="Sản phẩm">
+                                        <img class="w-100" src="{% static 'assets/images/' %}{{ sanpham.HinhAnh }}" alt="Sản phẩm">
                                     </a>
                                 </div>
                             </div>
@@ -57,7 +57,7 @@ Forgot Password
                         <div class="product-head mb-3">
                             <h2 class="product-title">
                                 <font style="vertical-align: inherit;">
-                                    <font style="vertical-align: inherit;"><?=$sanpham[0]['TenSP']  ?></font>
+                                    <font style="vertical-align: inherit;">{{sanpham.TenSP}}</font>
                                 </font>
                             </h2>
                         </div>
@@ -65,10 +65,7 @@ Forgot Password
                             <span class="regular-price">
                                 <font style="vertical-align: inherit;">
                                     <font style="vertical-align: inherit;">
-                                    <?php
-                                         $formattedValue = number_format($sanpham[0]['DonGia'], 0, ',', '.') . ' VNĐ';
-                                         echo $formattedValue;
-                                    ?></font>
+                                    {{sanpham.DonGia}}</font>
                                 </font>
                             </span>   
                         </div>
@@ -83,19 +80,14 @@ Forgot Password
                             <span>
                                 <font style="vertical-align: inherit;">
                                     <font style="vertical-align: inherit;">Tình trạng: <span class="text-danger ">
-                                        <?php 
-                                            if( $sanpham[0]['SoLuong'] <=0)
-                                                echo 'Hết hàng';
-                                            else
-                                                echo 'Còn hàng';
-                                        ?></span>
+                                        {{sanpham.SoLuong}}   </span>
                                       </font>
                                 </font>
                             </span>
                         </div>
                         <p class="desc-content mb-5">
                             <font style="vertical-align: inherit;">
-                                <font style="vertical-align: inherit;"><?php echo $sanpham[0]['MoTa'] ?></font>
+                                <font style="vertical-align: inherit;"> {{sanpham.DonGia}}</font>
                             </font>
                         </p>
                         <div class="quantity-with_btn mb-5">                      
