@@ -20,17 +20,13 @@ About Us
     </div>
 </div>
 <div class="cart-main-wrapper mt-no-text">
-    <?php $tong = 0;    ?>
     <div class="container custom-area">
-        <form action="index.php?page=updatecart" method="post">
+        <form action="" method="post">
+            {% csrf_token %}
             <div class="row">
                 <div class="col-lg-12 col-custom">
                     <!-- Cart Table Area -->
                     <div class="cart-table table-responsive">
-                        <?php
-                        if ((isset($_SESSION['giohang'])) && (count($_SESSION['giohang']) > 0)) {
-                            $i = 0;
-                        ?>
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
@@ -67,20 +63,11 @@ About Us
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($_SESSION['giohang'] as $item) { ?>
-                                        <?php
-
-                                        $tt = $item[3] * $item[4];
-                                        $tong += $tt;
-                                        $product_info = get_SanPham($item[0]);
-                                        // Lấy số lượng từ thông tin sản phẩm
-                                        $stock = $product_info[0]['SoLuong'];
-                                        ?>
                                         <tr>
                                             <td class="pro-thumbnail"><a href="#"><img class="img-fluid" src="view/assets/images/product/<?php echo $item[2] ?>" alt="Sản phẩm"></a></td>
                                             <td class="pro-title"><a href="#">
                                                     <font style="vertical-align: inherit;">
-                                                        <font style="vertical-align: inherit;"><?php echo $item[1] ?></font>
+                                                        <font style="vertical-align: inherit;"></font>
                                                     </font><br>
                                                     <font style="vertical-align: inherit;">
                                                         <font style="vertical-align: inherit;"></font>
@@ -89,10 +76,7 @@ About Us
                                             <td class="pro-price"><span>
                                                     <font style="vertical-align: inherit;">
                                                         <font style="vertical-align: inherit;">
-                                                        <?php 
-                                                            $formattedValue= number_format($item[4] , 0, ',', '.') . ' VNĐ';
-                                                            echo $formattedValue;
-                                                        ?></font>
+                                                        </font>
                                                     </font>
                                                 </span></td>
                                             <td class="pro-quantity">

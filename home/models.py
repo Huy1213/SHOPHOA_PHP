@@ -1,6 +1,8 @@
 from django.db import models
 
-# Create your models here.
+
+# Create your models here
+        
 class Loai(models.Model):
     MaLoai = models.AutoField(primary_key=True)
     TenLoai = models.CharField(max_length=100)

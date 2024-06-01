@@ -59,20 +59,12 @@ Login
                                     <font style="vertical-align: inherit;">
                                         <font style="vertical-align: inherit;">Phương thức thanh toán</font>
                                     </font>
-                                </a>
-                                <?php  if(isset($_COOKIE['id'])) {  ?>   
-                                    <a href="view/login/logout.php"><i class="fa fa-sign-out"></i>
+                                </a> 
+                                    <a href="{% url 'logout' %}"><i class="fa fa-sign-out"></i>
                                         <font style="vertical-align: inherit;">
                                             <font style="vertical-align: inherit;">Đăng xuất</font>
                                         </font>
                                     </a>
-                                <?php } if(isset($_SESSION['role'])) {?>
-                                    <a href="{% url 'home' %}?page=logout"><i class="fa fa-sign-out"></i>
-                                        <font style="vertical-align: inherit;">
-                                            <font style="vertical-align: inherit;">Đăng xuất</font>
-                                        </font>
-                                    </a>
-                                <?php }?>
                                 
                             </div>
                         </div>
@@ -113,21 +105,6 @@ Login
                                                     <div class="single-input-item mb-3">
                                                     
                                                         <label for="email" class="required mb-1"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Địa chỉ của quý khách là</font></font></label>
-                                                        <select class="form-select" name="diachifull" id="">
-                                                        <?php  
-                                                            if(isset($diachi)) {                                                                          
-                                                            foreach ($diachi as $dc) {              
-                                                            if (!empty($dc['Duong']) && !empty($dc['Phuong']) && !empty($dc['Huyen']) && !empty($dc['Tinh'])) {
-                                                            ?>
-                                                                <option value="<?php echo $dc['MaDC']; ?>">      
-                                                                    <?php echo $dc['Duong'] . ', ' . $dc['Phuong'] . ', ' . $dc['Huyen'] . ', ' . $dc['Tinh']; ?>
-                                                                </option>
-                                                            <?php 
-                                                                } 
-                                                            }
-                                                             }
-                                                            ?>
-                                                        </select>
                                                     </div>                                        
                             
                                                     <div class="single-input-item single-item-button">
@@ -147,58 +124,38 @@ Login
                                             </font>
                                         </h3>
                                         <div class="account-details-form">
-                                        <?php if(isset($_COOKIE['id']) && isset($_COOKIE['sess'])){ 
-                                               
-                                                $Controller = new Controller;
-                                                if($Controller -> checkUserStatus($_COOKIE['id'], $_COOKIE['sess'])){
-                                                    echo $Controller -> printData(intval($_COOKIE['id']));
-                                                
-                                                } 
-                                            
-                                        } else { ?>
-                                        
-                                            <?php $Controller = new Controller; echo $Controller -> printData(intval($_SESSION['iduser'])); ?>
-                                        <?php } ?>
                                             
                                         </div>
                                         <div class="account-details-form">
-                                                <form action="{% url 'home' %}?page=taikhoancuatoi" method="post">
+                                                <form action="" method="post">
+                                                    {% csrf_token %}
                                                     <div class="row mt-5">
                                                         <div class="col-lg-6 col-custom">
                                                             <div class="single-input-item mb-3">
                                                                 <label for="first-name" class="required mb-1"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Tên đầu tiên</font></font></label>
-                                                                <input name="f_name" type="text" value="<?php echo $infor[0]['f_name'] ?>" id="first-name" placeholder="Tên đầu tiên" <?php if(isset($_COOKIE['id'])) echo 'readonly' ?>>
+                                                                <input name="first_name" type="text" placeholder="Tên đầu tiên" value="{{user.first_name}}">
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-6 col-custom">
                                                             <div class="single-input-item mb-3">
                                                                 <label for="last-name" class="required mb-1"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Họ</font></font></label>
-                                                                <input name="l_name" type="text" value="<?php echo $infor[0]['l_name'] ?>" id="last-name" placeholder="Họ" <?php if(isset($_COOKIE['id'])) echo 'readonly' ?>>
+                                                                <input name="last_name" type="text" placeholder="Họ" value="{{user.last_name}}">
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <div class="single-input-item mb-3">
+                                                        <label for="username" class="required mb-1"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Tài khoản</font></font></label>
+                                                        <input name="username" type="text"  placeholder="Tên tài khoản" value="{{user.username}}">
+                                                    </div>
                                                     
                                                     <div class="single-input-item mb-3">
-                                                        <label for="email" class="required mb-1"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Địa chỉ của quý khách là</font></font></label>
-                                                        <select class="form-select" name="" id="">
-                                                            <?php foreach ($diachi as $dc) { ?>
-                                                            <option value="<?php echo $dc['MaDC']?>"><?php echo $dc['Duong'] . ', ' . $dc['Phuong'] . ', ' . $dc['Huyen'] . ', ' . $dc['Tinh']; ?></option>
-                                                            <?php } ?>
-                                                        </select>
-                                                    </div>
-                                                    <div class="single-input-item mb-3">
-                                                        <label for="email" class="required mb-1"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">SĐT</font></font></label>
-                                                        <input name="sdt" type="text" value="<?php echo $infor[0]['sdt'] ?>" id="email" placeholder="Số điện thoại">
-                                                    </div>
-                                                    <div class="single-input-item mb-3">
                                                         <label for="email" class="required mb-1"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Địa chỉ email</font></font></label>
-                                                        <input name="email" type="email" id="email" value="<?php echo $infor[0]['email'] ?>" placeholder="Địa chỉ email" <?php if(isset($_COOKIE['id'])) echo 'readonly' ?>>
+                                                        <input name="email" type="email"  placeholder="Email" value="{{user.email}}">
                                                     </div>
                             
                                                     <div class="single-input-item single-item-button">
                                                         <button name="btnThayDoi" class="btn flosun-button secondary-btn theme-color  rounded-0"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Lưu thay đổi</font></font></button>
                                                     </div>
-                                                    <p class="text-danger"><?php echo $err ?></p>
                                                 </form>
                                             </div>
                                     </div>

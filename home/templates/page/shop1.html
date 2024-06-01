@@ -32,17 +32,16 @@ Login
                 </div>
 
                 <div class="shop-select">
-                <form class="d-flex flex-column w-100" action="index.php" method="get">
-                    <input type="hidden" name="page" value="sanpham">
-                    <div class="form-group">
-                        <select class="form-control nice-select w-100" name="sort" onchange="this.form.submit()">
-                            <option value="1" <?php if(isset($_GET['sort']) && $_GET['sort'] == '1') echo 'selected'; ?>>Theo bảng chữ cái, AZ</option>
-                            <option value="2" <?php if(isset($_GET['sort']) && $_GET['sort'] == '2') echo 'selected'; ?>>Theo giá</option>
-                            <!-- Thêm các tuỳ chọn khác nếu cần -->
-                        </select>                   
-                    </div>
+                    <form class="d-flex flex-column w-100" action="{% url 'sanpham' %}" method="get">
+                        <input type="hidden" name="page" value="sanpham">
+                        <div class="form-group">
+                            <select class="form-control nice-select w-100" name="sort" onchange="this.form.submit()">
+                                <option value="{{ sanpham.TenSP }}">Theo bảng chữ cái, AZ</option>
+                                <option value="{{ sanpham.DonGia }}">Theo giá</option>
+                                <!-- Thêm các tuỳ chọn khác nếu cần -->
+                            </select>                   
+                        </div>
                 </form>
-
                 </div>
             </div>
             <!--shop toolbar end-->
@@ -167,7 +166,14 @@ Login
                         </h3>
                         <div class="sidebar-body">
                             <ul class="tags">
-                                
+                                {% for tl in item_mausac %}
+                                <li><a href="{% url 'DSSPTheoMau' tl.MaMau %}">
+                                    <font style="vertical-align: inherit;">
+                                        <font style="vertical-align: inherit;">{{tl.TenMau}}</font>
+                                    </font>
+                                </a>
+                                 </li>
+                            {% endfor %}
                             </ul>
                         </div>
                     </div>

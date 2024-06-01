@@ -31,33 +31,28 @@ Login
                             <h2 class="title-4 mb-2"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Đăng nhập</font></font></h2>
                             <p class="desc-content"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Vui lòng đăng nhập bằng cách sử dụng chi tiết tài khoản dưới đây.</font></font></p>
                         </div>
-                        <form action="{% url 'home' %}?page=login" method="post">
-                            <div class="single-input-item mb-3">
-                                <input name="username" type="text" placeholder="Tên đăng nhập">
+                        <form method="POST">
+                            {% csrf_token %}
+                            {% for key, value in form.errors.items %}
+                                {{value}}
+                            {% endfor %}
+                            <div class="single-input-item mb-2">
+                                <label for="username">Tên đăng nhập</label>
+                                {{form.username}}
+                                {{ form.username.errors }}
                             </div>
-                            <div class="single-input-item mb-3">
-                                <input name="password" type="password" placeholder="Nhập mật khẩu của bạn">
-                            </div>
-                            <div class="single-input-item mb-3">
-                                <div class="login-reg-form-meta d-flex align-items-center justify-content-between">
-                                    <div class="remember-meta mb-3">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="rememberMe">
-                                            <label class="custom-control-label" for="rememberMe"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Nhớ tôi</font></font></label>
-                                        </div>
-                                    </div>
-                                    <a href="{% url 'forgotpassword' %}" class="forget-pwd mb-3"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Quên mật khẩu?</font></font></a>
+                                <div class="single-input-item mb-2">
+                                    <label for="password">Mật khẩu</label>
+                                    {{form.password}}
+                                    {{ form.password.errors }}
                                 </div>
+                            <div class="single-input-item mb-1">
+                                <a href="{% url 'forgot_password' %}" class="forget-pwd mb-3"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Quên mật khẩu?</font></font></a>
+                                <input type="hidden" name="next" value="/"/>
+                                <input class="btn flosun-button secondary-btn theme-color rounded-0" type="submit" value="Đăng Nhập" name="dangnhap">
+                                <div><p>Chưa có tài khoản? <a class="fw-bold" href="{% url 'register' %}">Đăng ký tại đây</a></p></div>
                             </div>
-                            <div class="single-input-item mb-3">
-                                <input type="submit" name="login" class="btn flosun-button secondary-btn theme-color rounded-0" value="Đăng nhập">
-                                <p class="text-danger "><?php echo $errDN ?></p>
-                            </div>
-                            <div class="single-input-item">
-                                <a href="{% url 'register' %}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Tạo tài khoản</font></font></a>
-                                <button  onclick="window.location = '<?php echo $login_url; ?>'" type="button" class="btn btn-alert-info  text-dark w-25"><img style="height: 30px;" class="img-fluid" src="view/assets/images/icon/icon_google.jpg" alt=""> </button>
-                            </div>
-                        </form>
+                        </form>           
                     </div>
                 </div>
             </div>

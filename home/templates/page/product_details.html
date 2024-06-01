@@ -111,11 +111,11 @@ Forgot Password
                                 </div> 
                                                           
                                 <div class="add-to_cart">
-                                    <input class="btn product-cart button-icon flosun-button dark-btn" name="addtocart" type="submit" value="Thêm vào giỏ hàng" <?php if($sanpham[0]['SoLuong']<=0) echo 'disabled'  ?>>                             
-                                    <input type="hidden" value="<?=$sanpham[0]['MaSP']  ?>" name="id">
-                                    <input type="hidden" value="<?=$sanpham[0]['TenSP']  ?>" name="tensp">
-                                    <input type="hidden" value="<?=$sanpham[0]['HinhAnh']  ?>" name="img">
-                                    <input type="hidden" value="<?=$sanpham[0]['DonGia']  ?>" name="gia">
+                                    <input class="btn product-cart button-icon flosun-button dark-btn" name="addtocart" type="submit" value="Thêm vào giỏ hàng">                           
+                                    <input type="hidden" value="{{sanpham.MaSP}}" name="id">
+                                    <input type="hidden" value="{{sanpham.TenSP}}" name="tensp">
+                                    <input type="hidden" value="{{ sanpham.HinhAnh }}" name="img">
+                                    <input type="hidden" value="{{sanpham.DonGia}}" name="gia">
                                     <input type="hidden" id="availableStock" value="<?=$sanpham[0]['SoLuong']?>" name="availableStock">
                                 </div>                             
                         </div>

@@ -4,55 +4,7 @@ Register
 {% endblock %}
 {% block content %}
 {%load static %} 
-<script>
-    $(document).ready(function() {
-        //Lấy tỉnh thành
-        $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function(data_tinh) {
-            if (data_tinh.error === 0) {
-                $.each(data_tinh.data, function(key_tinh, val_tinh) {
-                    $("#tinh").append('<option value="' + val_tinh.id + '">' + val_tinh.full_name + '</option>');
-                });
-                $("#tinh").change(function(e) {
-                    var idtinh = $(this).val();
-                    var tenTinh = $("#tinh option:selected").text(); // Lấy tên tỉnh được chọn
-                    $("#hidden_tinh").val(tenTinh); // Đặt giá trị của trường ẩn để gửi tên tỉnh về server
-                    
-                    //Lấy quận huyện
-                    $.getJSON('https://esgoo.net/api-tinhthanh/2/' + idtinh + '.htm', function(data_quan) {
-                        if (data_quan.error === 0) {
-                            $("#quan").html('<option value="0">Quận Huyện</option>');
-                            $("#phuong").html('<option value="0">Phường Xã</option>');
-                            $.each(data_quan.data, function(key_quan, val_quan) {
-                                $("#quan").append('<option value="' + val_quan.id + '">' + val_quan.full_name + '</option>');
-                            });
-                        }
-                    });
-                });
-            }
-        });
-        
-        //Lấy phường xã khi chọn quận huyện
-        $("#quan").change(function(e) {
-            var idquan = $(this).val();
-            var tenQuan = $("#quan option:selected").text(); // Lấy tên quận huyện được chọn
-            $("#hidden_quan").val(tenQuan); // Đặt giá trị của trường ẩn để gửi tên quận huyện về server
-            
-            $.getJSON('https://esgoo.net/api-tinhthanh/3/' + idquan + '.htm', function(data_phuong) {
-                if (data_phuong.error === 0) {
-                    $("#phuong").html('<option value="0">Phường Xã</option>');
-                    $.each(data_phuong.data, function(key_phuong, val_phuong) {
-                        $("#phuong").append('<option value="' + val_phuong.id + '">' + val_phuong.full_name + '</option>');
-                    });
-                }
-            });
-        });
-        // Lấy phường xã khi chọn phường xã
-        $("#phuong").change(function(e) {
-            var tenPhuong = $("#phuong option:selected").text(); // Lấy tên phường xã được chọn
-            $("#hidden_phuong").val(tenPhuong); // Đặt giá trị của trường ẩn để gửi tên phường xã về server
-        });
-    }); 
-</script>
+
 <body>
     <!-- Breadcrumb Area Start Here -->
     <div class="breadcrumbs-area position-relative">
@@ -82,37 +34,42 @@ Register
                             <h2 class="title-4 mb-2">Tạo tài khoản</h2>
                             <p class="desc-content">Vui lòng đăng ký bằng cách sử dụng chi tiết tài khoản dưới đây.</p>
                         </div>
-                        <form action="{% url 'home' %}?page=dangky" method="post">
+                        <form action="." method="post">
+                            {% csrf_token %}
+                            {{ form.non_field_errors }}
                             <div class="container">
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="single-input-item mb-2">
-                                            <input type="text" id="f_name" placeholder="Họ" name="f_name" required>
-                                            <div class="text-danger" style="font-size:smaller" id="f_nameError"><?php echo isset($errors['f_name']) ? $errors['f_name'] : ''; ?></div>
+                                            <label for="first_name">Họ</label>
+                                            {{form.first_name}}
+                                            {{ form.first_name.errors }}
                                         </div>
                                     </div>
                                     <div class="col-sm">
                                         <div class="single-input-item mb-2">
-                                            <input type="text" id="l_name" placeholder="Tên" name="l_name" required>
-                                            <div class="text-danger" style="font-size:smaller" id="l_nameError"><?php echo isset($errors['l_name']) ? $errors['l_name'] : ''; ?></div>
+                                            <label for="last_name">Tên</label>
+                                            {{form.last_name}}
+                                            {{ form.last_name.errors }}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-sm-6">
+                                    <!-- <div class="col-sm-6">
                                         <div class="single-input-item mb-2">
-                                            <input type="text" id="sdt" placeholder="Số điện thoại" name="sdt" required>
-                                            <div class="text-danger" style="font-size:smaller" id="sdtError"><?php echo isset($errors['sdt']) ? $errors['sdt'] : ''; ?></div>
+                                            <label for="phone_number">Số điện thoại</label>
+                                            {{form.phone_number}}
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="col-sm">
                                         <div class="single-input-item mb-2">
-                                            <input type="email" id="email" placeholder="Email" name="email" required>
-                                            <div class="text-danger" style="font-size:smaller" id="emailError"><?php echo isset($errors['email']) ? $errors['email'] : ''; ?></div>
+                                            <label for="email">Email</label>
+                                            {{form.email}}
+                                            {{ form.email.errors }}
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <!-- <div class="row">
                                     <div class="single-input-item mb-0">
                                         <input type="text" id="diachi" placeholder="Nhập địa chỉ" name="diachi" required>
                                         <div class="text-danger" style="font-size:smaller" id="diachiError"><?php echo isset($errors['diachi']) ? $errors['diachi'] : ''; ?></div>
@@ -122,7 +79,7 @@ Register
                                             <input type="hidden" id="hidden_tinh" name="hidden_tinh" value="">
                                             <select id="tinh" name="tinh" style="font-size: 14px; border-radius: 0%; border:0;" class="form-control">
                                                 <option value="">Chọn tỉnh</option>
-                                                <!-- populate options with data from your database or API -->
+                                                 populate options with data from your database or API
                                             </select>
                                         </div>
                                     </div>
@@ -142,28 +99,34 @@ Register
                                             </select>
                                         </div>  
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="row">
                                     <div class="single-input-item mb-2">
-                                        <input type="text" id="userName" placeholder="Tên đăng nhập" name="userName" required>
-                                        <div class="text-danger" style="font-size:smaller" id="userNameError"><?php echo isset($errors['userName']) ? $errors['userName'] : ''; ?></div>
+                                        <label for="username">Tên đăng nhập</label>
+                                        {{form.username}}
+                                        {{ form.username.errors }}
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="single-input-item mb-2">
-                                            <input type="password" id="password" placeholder="Nhập mật khẩu" name="password" required>
-                                            <div class="text-danger" style="font-size:smaller" id="passwordError"><?php echo isset($errors['password']) ? $errors['password'] : ''; ?></div>
+                                            <label for="password1">Mật khẩu</label>
+                                            {{form.password1}}
+                                            {{ form.password1.errors }}
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="single-input-item mb-1">
-                                            <input type="password" id="confirm_pwd" placeholder="Xác nhận mật khẩu" name="confirm_pwd" required>
-                                            <div class="text-danger" style="font-size:smaller" id="confirm_pwdError"><?php echo isset($errors['confirm_pwd']) ? $errors['confirm_pwd'] : ''; ?></div>
+                                            <label for="password2">Xác nhận mật khẩu</label>
+                                            {{form.password2}}
+                                            {{ form.password2.errors }}
                                         </div>
                                     </div>
                                     <div class="single-input-item mb-1">
                                         <input class="btn flosun-button secondary-btn theme-color rounded-0" type="submit" value="Đăng Ký" name="dangky">
-                                        <div><p>Đã có tài khoản? <a class="fw-bold" href="{% url 'login' %}">Đăng nhập tại đây</a></p></div>
+                                        <div><p>Đã có tài khoản? <a class="fw-bold" href="index.php?page=login">Đăng nhập tại đây</a></p></div>
                                     </div>
+                                    {% for message in messages %}
+                                     <div class="alert alert-danger {{ message.tags }}">{{ message }}</div>
+                                    {% endfor %}
                                 </div>
                             </div>
                         </form>

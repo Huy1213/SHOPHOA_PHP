@@ -79,20 +79,34 @@
                                     </li>
                                     <li>                                        
                                         <a href="{% url 'my_account' %}">
-                                            <span class="menu-text"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Tài khoản</font></font></span>
+                                            {% if user.is_authenticated %}
+                                            <span class="menu-text"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{ user.username }}</font></font></span>
+                                            {% else %}
+                                            <span class="menu-text"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Tài Khoản</font></font></span>
+                                            {% endif %}
                                         </a>
                                     </li>
-                                <li>
-                                    <a href="{% url 'login' %}">
-                                        <span class="menu-text"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Đăng nhập</font></font></span>
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a href="{% url 'register' %}">
-                                        <span class="menu-text"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Đăng ký</font></font></span>
-                                    </a>
-                                </li>
+                                    <!-- Hiển thị liên kết Đăng xuất -->
+                                    <li>
+                                        {% if user.username %}
+                                        <a href="{% url 'logout' %}">
+                                            <span class="menu-text"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Đăng xuất</font></font></span>
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <!-- Hiển thị liên kết Đăng nhập -->
+                                    <li>
+                                        <a href="{% url 'login' %}">
+                                            <span class="menu-text"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Đăng nhập</font></font></span>
+                                        </a>
+                                    </li>
+                                    <!-- Hiển thị liên kết Đăng ký -->
+                                    <li>
+                                        <a href="{% url 'register' %}">
+                                            <span class="menu-text"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Đăng ký</font></font></span>
+                                        </a>
+                                    </li>
+                                {% endif %}
                             </ul>
                         </nav>
                     </div>
