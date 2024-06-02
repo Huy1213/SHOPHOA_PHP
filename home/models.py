@@ -30,6 +30,18 @@ class SanPham(models.Model):
     MaMau = models.ForeignKey(MauSac, on_delete=models.SET_NULL, null =True)
     def __str__(self):
         return self.TenSP
+
+
+class Diachi(models.Model):
+    MaDC=models.AutoField(primary_key=True)
+    username=models.ForeignKey(User,on_delete=models.SET_NULL, null =True)
+    Duong=models.CharField(max_length=255)
+    Tinh=models.CharField(max_length=255)
+    Quan=models.CharField(max_length=255)
+    Phuong=models.CharField(max_length=255)
+    def __str__(self):
+            return f'{self.Duong}, {self.Phuong}, {self.Quan}, {self.Tinh}'
+        
 class KhachHang(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     TenKH = models.CharField(max_length=200)
@@ -55,3 +67,4 @@ class Order(models.Model):
     @property
     def tong_tien(self):
          return self.soluong * self.sanpham.DonGia 
+

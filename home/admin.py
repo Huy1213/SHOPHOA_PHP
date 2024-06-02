@@ -1,9 +1,10 @@
 from django.contrib import admin
-from .models import SanPham, Loai,MauSac, KhachHang, Cart,Order
+from .models import SanPham, Loai,MauSac, KhachHang, Cart,Order,Diachi
 # Register your models here.
 @admin.register(SanPham)
 class SanPhamModelAdmin(admin.ModelAdmin):
     list_display = ['MaSP','TenSP','DonGia','SoLuong','MaLoai','HinhAnh']
+    
 @admin.register(Loai)
 class LoaiModelAdmin(admin.ModelAdmin):
     list_display = ['MaLoai','TenLoai']
@@ -13,6 +14,11 @@ class MauSacModelAdmin(admin.ModelAdmin):
 @admin.register(KhachHang)
 class KhachHangModelAdmin(admin.ModelAdmin):
     list_display = ['id','user','TenKH','DiaChi','DienThoai']
+    
+@admin.register(Diachi)
+class DiachiModelAdmin(admin.ModelAdmin):
+    list_display = ['MaDC','username','Duong','Tinh','Quan','Phuong']
+    
 @admin.register(Cart)
 class CartModelAdmin(admin.ModelAdmin):
     list_display = ['id','user','sanpham','soluong']

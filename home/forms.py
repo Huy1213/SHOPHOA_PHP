@@ -2,6 +2,7 @@ from django import forms
 import re
 from django.contrib.auth.models import User
 from .models import KhachHang
+
 class RegistrationForm(forms.Form):
     username = forms.CharField(label='Tài khoản', max_length=30)
     email = forms.EmailField(label='Email')
@@ -21,10 +22,10 @@ class RegistrationForm(forms.Form):
             if not re.search(r'\d', password1):
                 raise forms.ValidationError("Mật khẩu phải chứa ít nhất một số")
             
-            if password1 == password2 and password1:
-                return password2
-        
-        raise forms.ValidationError("Mật khẩu không hợp lệ")
+            if password1 != password2:
+                raise forms.ValidationError("Mật khẩu không hợp lệ")
+            
+            return password2
 
     def clean_username(self):
         username = self.cleaned_data['username']
@@ -40,21 +41,30 @@ class RegistrationForm(forms.Form):
             raise forms.ValidationError("Email đã tồn tại")
         return email
 
-    def save(self):
-        User.objects.create_user(
+    def save(self, commit=True):
+        user = User.objects.create_user(
             username=self.cleaned_data['username'], 
             email=self.cleaned_data['email'], 
             password=self.cleaned_data['password1'],
             first_name=self.cleaned_data['first_name'],
             last_name=self.cleaned_data['last_name']
         )
+        if commit:
+            user.save()
+        return user
+
 class ThongTinKhachHang(forms.ModelForm):
     class Meta:
         model = KhachHang
         fields=['TenKH','DiaChi','DienThoai']
         widgets={
-            'TenKH':forms.TextInput(attrs={'class':'form-control'}),
-            'DiaChi':forms.TextInput(attrs={'class':'form-control'}),
-            'DienThoai':forms.TextInput(attrs={'class':'form-control'}),
+            'TenKH':forms.TextInput(attrs={'class':'single-input-item mb-2'}),
+            'DiaChi':forms.TextInput(attrs={'class':'single-input-item mb-2'}),
+            'DienThoai':forms.TextInput(attrs={'class':'single-input-item mb-2'}),
+        }
+        labels = {
+            'TenKH': 'Tên Khách Hàng',
+            'DiaChi': 'Địa Chỉ',
+            'DienThoai': 'Điện Thoại',
         }
   

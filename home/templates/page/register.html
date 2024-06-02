@@ -4,6 +4,56 @@ Register
 {% endblock %}
 {% block content %}
 {%load static %} 
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            //Lấy tỉnh thành
+            $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function(data_tinh) {
+                if (data_tinh.error === 0) {
+                    $.each(data_tinh.data, function(key_tinh, val_tinh) {
+                        $("#tinh").append('<option value="' + val_tinh.id + '">' + val_tinh.full_name + '</option>');
+                    });
+                    $("#tinh").change(function(e) {
+                        var idtinh = $(this).val();
+                        var tenTinh = $("#tinh option:selected").text(); // Lấy tên tỉnh được chọn
+                        $("#hidden_tinh").val(tenTinh); // Đặt giá trị của trường ẩn để gửi tên tỉnh về server
+                        
+                        //Lấy quận huyện
+                        $.getJSON('https://esgoo.net/api-tinhthanh/2/' + idtinh + '.htm', function(data_quan) {
+                            if (data_quan.error === 0) {
+                                $("#quan").html('<option value="0">Quận Huyện</option>');
+                                $("#phuong").html('<option value="0">Phường Xã</option>');
+                                $.each(data_quan.data, function(key_quan, val_quan) {
+                                    $("#quan").append('<option value="' + val_quan.id + '">' + val_quan.full_name + '</option>');
+                                });
+                            }
+                        });
+                    });
+                }
+            });
+            
+            //Lấy phường xã khi chọn quận huyện
+            $("#quan").change(function(e) {
+                var idquan = $(this).val();
+                var tenQuan = $("#quan option:selected").text(); // Lấy tên quận huyện được chọn
+                $("#hidden_quan").val(tenQuan); // Đặt giá trị của trường ẩn để gửi tên quận huyện về server
+                
+                $.getJSON('https://esgoo.net/api-tinhthanh/3/' + idquan + '.htm', function(data_phuong) {
+                    if (data_phuong.error === 0) {
+                        $("#phuong").html('<option value="0">Phường Xã</option>');
+                        $.each(data_phuong.data, function(key_phuong, val_phuong) {
+                            $("#phuong").append('<option value="' + val_phuong.id + '">' + val_phuong.full_name + '</option>');
+                        });
+                    }
+                });
+            });
+            // Lấy phường xã khi chọn phường xã
+            $("#phuong").change(function(e) {
+                var tenPhuong = $("#phuong option:selected").text(); // Lấy tên phường xã được chọn
+                $("#hidden_phuong").val(tenPhuong); // Đặt giá trị của trường ẩn để gửi tên phường xã về server
+            });
+        }); 
+    </script>
 
 <body>
     <!-- Breadcrumb Area Start Here -->
@@ -69,17 +119,15 @@ Register
                                         </div>
                                     </div>
                                 </div>
-                                <!-- <div class="row">
+                                <div class="row">
                                     <div class="single-input-item mb-0">
-                                        <input type="text" id="diachi" placeholder="Nhập địa chỉ" name="diachi" required>
-                                        <div class="text-danger" style="font-size:smaller" id="diachiError"><?php echo isset($errors['diachi']) ? $errors['diachi'] : ''; ?></div>
+                                        <input type="text" id="duong" placeholder="Nhập địa chỉ" name="duong" required>
                                     </div>
                                     <div class="col-4">
                                         <div class="single-input-item mb-3">
                                             <input type="hidden" id="hidden_tinh" name="hidden_tinh" value="">
                                             <select id="tinh" name="tinh" style="font-size: 14px; border-radius: 0%; border:0;" class="form-control">
                                                 <option value="">Chọn tỉnh</option>
-                                                 populate options with data from your database or API
                                             </select>
                                         </div>
                                     </div>
@@ -99,7 +147,7 @@ Register
                                             </select>
                                         </div>  
                                     </div>
-                                </div> -->
+                                </div>
                                 <div class="row">
                                     <div class="single-input-item mb-2">
                                         <label for="username">Tên đăng nhập</label>
@@ -125,7 +173,7 @@ Register
                                         <div><p>Đã có tài khoản? <a class="fw-bold" href="index.php?page=login">Đăng nhập tại đây</a></p></div>
                                     </div>
                                     {% for message in messages %}
-                                     <div class="alert alert-danger {{ message.tags }}">{{ message }}</div>
+                                        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
                                     {% endfor %}
                                 </div>
                             </div>

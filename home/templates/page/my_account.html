@@ -4,6 +4,56 @@ Login
 {% endblock %}
 {% block content %}
 {%load static %} 
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            //Lấy tỉnh thành
+            $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function(data_tinh) {
+                if (data_tinh.error === 0) {
+                    $.each(data_tinh.data, function(key_tinh, val_tinh) {
+                        $("#tinh").append('<option value="' + val_tinh.id + '">' + val_tinh.full_name + '</option>');
+                    });
+                    $("#tinh").change(function(e) {
+                        var idtinh = $(this).val();
+                        var tenTinh = $("#tinh option:selected").text(); // Lấy tên tỉnh được chọn
+                        $("#hidden_tinh").val(tenTinh); // Đặt giá trị của trường ẩn để gửi tên tỉnh về server
+                        
+                        //Lấy quận huyện
+                        $.getJSON('https://esgoo.net/api-tinhthanh/2/' + idtinh + '.htm', function(data_quan) {
+                            if (data_quan.error === 0) {
+                                $("#quan").html('<option value="0">Quận Huyện</option>');
+                                $("#phuong").html('<option value="0">Phường Xã</option>');
+                                $.each(data_quan.data, function(key_quan, val_quan) {
+                                    $("#quan").append('<option value="' + val_quan.id + '">' + val_quan.full_name + '</option>');
+                                });
+                            }
+                        });
+                    });
+                }
+            });
+            
+            //Lấy phường xã khi chọn quận huyện
+            $("#quan").change(function(e) {
+                var idquan = $(this).val();
+                var tenQuan = $("#quan option:selected").text(); // Lấy tên quận huyện được chọn
+                $("#hidden_quan").val(tenQuan); // Đặt giá trị của trường ẩn để gửi tên quận huyện về server
+                
+                $.getJSON('https://esgoo.net/api-tinhthanh/3/' + idquan + '.htm', function(data_phuong) {
+                    if (data_phuong.error === 0) {
+                        $("#phuong").html('<option value="0">Phường Xã</option>');
+                        $.each(data_phuong.data, function(key_phuong, val_phuong) {
+                            $("#phuong").append('<option value="' + val_phuong.id + '">' + val_phuong.full_name + '</option>');
+                        });
+                    }
+                });
+            });
+            // Lấy phường xã khi chọn phường xã
+            $("#phuong").change(function(e) {
+                var tenPhuong = $("#phuong option:selected").text(); // Lấy tên phường xã được chọn
+                $("#hidden_phuong").val(tenPhuong); // Đặt giá trị của trường ẩn để gửi tên phường xã về server
+            });
+        }); 
+    </script>
 <!-- Breadcrumb Area Start Here -->
 <div class="breadcrumbs-area position-relative">
     <div class="container">
@@ -80,48 +130,7 @@ Login
                             <div class="tab-content" id="myaccountContent">
                                 <!-- Single Tab Content Start -->
                                 <div class="tab-pane fade show active" id="dashboad" role="tabpanel">
-                                <!-- <div class="myaccount-content"> -->
-                                        <!-- <h3>
-                                            <font style="vertical-align: inherit;">
-                                                <font style="vertical-align: inherit;">Địa chỉ</font>
-                                            </font>
-                                        </h3>
-                                        
-                                        <div class="account-details-form">
-                                                <form action="{% url 'home' %}?page=taikhoancuatoi" method="post">                                 
-                                                    <div class="single-input-item mb-3">
-                                                        <label for="display-name" class="required mb-1"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Địa chỉ nhà</font></font></label>
-                                                        <input name="diachinha" type="text" value="" id="display-name" placeholder="Địa chỉ nhà (số nhà,tên đường)">
-                                                        <input type="hidden" id="hidden_tinh" name="hidden_tinh" value="">
-                                                        <input type="hidden" id="hidden_quan" name="hidden_quan" value="">
-                                                        <input type="hidden" id="hidden_phuong" name="hidden_phuong" value="">
-                                                        <div class="css_select_div mt-2">
-                                                            <select class="css_select" id="tinh" name="tinh" title="Chọn Tỉnh Thành">
-                                                                <option value="0">Tỉnh Thành</option>
-                                                            </select> 
-                                                            <select class="css_select" id="quan" name="quan" title="Chọn Quận Huyện">
-                                                                <option value="0">Quận Huyện</option>
-                                                            </select> 
-                                                            <select class="css_select" id="phuong" name="phuong" title="Chọn Phường Xã">
-                                                                <option value="0">Phường Xã</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="single-input-item mb-3">
-                                                    
-                                                        <label for="email" class="required mb-1"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Địa chỉ của quý khách là</font></font></label>
-                                                    </div>                                        
-                            
-                                                    <div class="single-input-item single-item-button">
-                                                        <button name="btnThemDC" class="btn flosun-button secondary-btn theme-color  rounded-0"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Thêm địa chỉ </font></font></button>
-                                                    </div>
-                                                    <div class="single-input-item single-item-button mt-3">
-                                                        <button name="btnXoaDC" class="btn flosun-button secondary-btn theme-color  rounded-0"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Xóa địa chỉ </font></font></button>
-                                                    </div>
-                                                    <p class="text-danger"><?php echo $errDC ?></p>
-                                                </form>
-                                            </div>
-                                    </div> -->
+
                                     <div class="myaccount-content">
                                         <h3>
                                             <font style="vertical-align: inherit;">
@@ -135,14 +144,70 @@ Login
                                             <div class="account-details-form">
                                                 <form action="" method="post">
                                                     {% csrf_token %}
-                                                    {% for fm in form %}
-                                                        <div class="form-group">
-                                                            {{ fm.label_tag }} {{ fm }}
+                                                    <div class="row mt-5">
+                                                        <div class="col-lg-6 col-custom">
+                                                            <div class="single-input-item mb-3">
+                                                                <label for="first-name" class="required mb-1"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Tên đầu tiên</font></font></label>
+                                                                <input name="first_name" type="text" placeholder="Tên đầu tiên" value="{{user.first_name}}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6 col-custom">
+                                                            <div class="single-input-item mb-3">
+                                                                <label for="last-name" class="required mb-1"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Họ</font></font></label>
+                                                                <input name="last_name" type="text" placeholder="Họ" value="{{user.last_name}}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="single-input-item mb-3">
+                                                        <label for="username" class="required mb-1"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Tài khoản</font></font></label>
+                                                        <input name="username" type="text"  placeholder="Tên tài khoản" value="{{user.username}}">
+                                                    </div>
+                                                    
+                                                    <div class="single-input-item mb-3">
+                                                        <label for="email" class="required mb-1"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Địa chỉ email</font></font></label>
+                                                        <input name="email" type="email"  placeholder="Email" value="{{user.email}}">
+                                                    </div>
+                                                    <div class="single-input-item mb-3">
+                                                        <label for="duong" class="required mb-1"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Địa chỉ</font></font></label>
+                                                        <input name="duong" type="text" id="duong" value="{{diachi.Duong}}">
+                                                    </div>
+                                                    <div class="row mt-3">
+                                                        <div class="col-lg-4 col-custom">
+                                                            <div class="single-input-item mb-3">
+                                                                <label for="tinh" class="required mb-1"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Tỉnh</font></font></label>
+                                                                <input name="tinh" type="text" id="tinh" value="{{diachi.Tinh}}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4 col-custom">
+                                                            <div class="single-input-item mb-3">
+                                                                <label for="quan" class="required mb-1"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Quận</font></font></label>
+                                                                <input name="quan" type="text" id="quan" value="{{diachi.Quan}}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4 col-custom">
+                                                            <div class="single-input-item mb-3">
+                                                                <label for="phuong" class="required mb-1"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Phường</font></font></label>
+                                                                <input name="phuong" type="text" id="phuong" value="{{diachi.Phuong}}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                            <br>
+                                                    <h3>
+                                                        <font style="vertical-align: inherit;">
+                                                            <font style="vertical-align: inherit;">Địa chỉ nhận hàng</font>
+                                                        </font>
+                                                    </h3>
+                                                    <div class="account-details-form">
+                                                        {% for fm in form %}
+                                                        <div class="form-group mt-2">
+                                                            {{ fm.label_tag }}
+                                                            {{ fm }}
                                                             <small class="text-danger">{{ fm.errors }}</small>
                                                         </div>
                                                     {% endfor %}
+                                                    <br>
                                                     <div class="single-input-item single-item-button">
-                                                        <button name="btnThayDoi" class="btn flosun-button secondary-btn theme-color rounded-0">Lưu</button>
+                                                        <button name="btnThayDoi" class="btn flosun-button secondary-btn theme-color  rounded-0"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Lưu thay đổi</font></font></button>
                                                     </div>
                                                     {%if form.non_field_errors %}
                                                         {%for error in form.non_field_errors%}
@@ -224,10 +289,7 @@ Login
                                                             <td>
                                                                 <font style="vertical-align: inherit;" >
                                                                     <font style="vertical-align: inherit;">
-                                                                    <?php 
-                                                                        $formattedValue = number_format($hd['TongTien'], 0, ',', '.') . ' VNĐ';
-                                                                        echo $formattedValue;
-                                                                    ?></font>
+                                                                  </font>
                                                                 </font>
                                                             </td>
                                                             <td>
@@ -283,60 +345,3 @@ Login
 </div>
 <!-- my account wrapper end -->
 {% endblock %}
-
-
-
-<script src="https://esgoo.net/scripts/jquery.js"></script>
-<style type="text/css">
-    .css_select_div{ text-align: center;}
-    .css_select{ display: inline-table; width: 25%; padding: 5px; margin: 5px 2%; border: solid 1px #686868; border-radius: 5px;}
-</style>
-<script>
-    $(document).ready(function() {
-    //Lấy tỉnh thành
-    $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function(data_tinh) {
-        if (data_tinh.error == 0) {
-            $.each(data_tinh.data, function(key_tinh, val_tinh) {
-                $("#tinh").append('<option value="' + val_tinh.id + '">' + val_tinh.full_name + '</option>');
-            });
-            $("#tinh").change(function(e) {
-                var idtinh = $(this).val();
-                var tenTinh = $("#tinh option:selected").text(); // Lấy tên tỉnh được chọn
-                $("#hidden_tinh").val(tenTinh); // Đặt giá trị của trường ẩn để gửi tên tỉnh về server
-                
-                //Lấy quận huyện
-                $.getJSON('https://esgoo.net/api-tinhthanh/2/' + idtinh + '.htm', function(data_quan) {
-                    if (data_quan.error == 0) {
-                        $("#quan").html('<option value="0">Quận Huyện</option>');
-                        $("#phuong").html('<option value="0">Phường Xã</option>');
-                        $.each(data_quan.data, function(key_quan, val_quan) {
-                            $("#quan").append('<option value="' + val_quan.id + '">' + val_quan.full_name + '</option>');
-                        });
-                    }
-                });
-            });
-        }
-    });
-    
-    //Lấy phường xã khi chọn quận huyện
-    $("#quan").change(function(e) {
-        var idquan = $(this).val();
-        var tenQuan = $("#quan option:selected").text(); // Lấy tên quận huyện được chọn
-        $("#hidden_quan").val(tenQuan); // Đặt giá trị của trường ẩn để gửi tên quận huyện về server
-        
-        $.getJSON('https://esgoo.net/api-tinhthanh/3/' + idquan + '.htm', function(data_phuong) {
-            if (data_phuong.error == 0) {
-                $("#phuong").html('<option value="0">Phường Xã</option>');
-                $.each(data_phuong.data, function(key_phuong, val_phuong) {
-                    $("#phuong").append('<option value="' + val_phuong.id + '">' + val_phuong.full_name + '</option>');
-                });
-            }
-        });
-    });
-    // Lấy phường xã khi chọn phường xã
-    $("#phuong").change(function(e) {
-        var tenPhuong = $("#phuong option:selected").text(); // Lấy tên phường xã được chọn
-        $("#hidden_phuong").val(tenPhuong); // Đặt giá trị của trường ẩn để gửi tên phường xã về server
-    });
-}); 
- </script>

@@ -24,5 +24,6 @@ urlpatterns = [
     path('forgot_password/', views.forgot_password, name='forgot_password'),
     path('product_details/<int:product_id>/', views.product_details, name='product_details'),
     path('update_cart/', update_cart, name='update_cart'),
+    path('activate/<uidb64>/<token>', views.activate, name='activate')
    
 ]
