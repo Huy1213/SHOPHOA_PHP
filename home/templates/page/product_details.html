@@ -34,7 +34,7 @@ Forgot Password
 </div>
 <div class="single-product-main-area">
     <div class="container container-default custom-area">
-        <form id="cart-form" action="index.php?page=addcart" method="post">
+        
             <div class="row">
                 <div class="col-lg-5 offset-lg-0 col-md-8 offset-md-2 col-custom">
                     <div class="product-details-img">
@@ -52,6 +52,7 @@ Forgot Password
 
                     </div>
                 </div>
+                {% csrf_token %}
                 <div class="col-lg-7 col-custom">
                     <div class="product-summery position-relative">
                         <div class="product-head mb-3">
@@ -110,14 +111,20 @@ Forgot Password
                                     </div>            
                                 </div> 
                                                           
-                                <div class="add-to_cart">
-                                    <input class="btn product-cart button-icon flosun-button dark-btn" name="addtocart" type="submit" value="Thêm vào giỏ hàng">                           
+                                
+                                    <!-- <input class="btn product-cart button-icon flosun-button dark-btn" name="addtocart" type="submit" value="Thêm vào giỏ hàng">                           
                                     <input type="hidden" value="{{sanpham.MaSP}}" name="id">
                                     <input type="hidden" value="{{sanpham.TenSP}}" name="tensp">
                                     <input type="hidden" value="{{ sanpham.HinhAnh }}" name="img">
                                     <input type="hidden" value="{{sanpham.DonGia}}" name="gia">
                                     <input type="hidden" id="availableStock" value="<?=$sanpham[0]['SoLuong']?>" name="availableStock">
-                                </div>                             
+                                 -->
+                                 <form action="/add-to-cart" class="d-inline">
+                                    
+                                    <input type="hidden" value="{{sanpham.MaSP}}" name="prod_id">
+                                    <button class="btn product-cart button-icon flosun-button dark-btn" type="submit">Thêm vào giỏ hàng</button>
+                                </form>
+                                                           
                         </div>
                         <!-- <div class="social-share mb-4">
                             <span>
@@ -136,7 +143,7 @@ Forgot Password
                     </div>
                 </div>
             </div>
-        </form>
+       
         <script>
             document.getElementById('cart-form').addEventListener('submit', function(event) {
                 var quantity = document.getElementById('soluong').value;

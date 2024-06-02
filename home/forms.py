@@ -1,7 +1,7 @@
 from django import forms
 import re
 from django.contrib.auth.models import User
-
+from .models import KhachHang
 class RegistrationForm(forms.Form):
     username = forms.CharField(label='Tài khoản', max_length=30)
     email = forms.EmailField(label='Email')
@@ -48,3 +48,13 @@ class RegistrationForm(forms.Form):
             first_name=self.cleaned_data['first_name'],
             last_name=self.cleaned_data['last_name']
         )
+class ThongTinKhachHang(forms.ModelForm):
+    class Meta:
+        model = KhachHang
+        fields=['TenKH','DiaChi','DienThoai']
+        widgets={
+            'TenKH':forms.TextInput(attrs={'class':'form-control'}),
+            'DiaChi':forms.TextInput(attrs={'class':'form-control'}),
+            'DienThoai':forms.TextInput(attrs={'class':'form-control'}),
+        }
+  

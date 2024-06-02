@@ -1,0 +1,146 @@
+{% extends "pages/layout.html" %}
+{% block title %}
+About Us
+{% endblock %}
+{% block content %}
+{% load static %}
+<div class="breadcrumbs-area position-relative">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <div class="breadcrumb-content position-relative section-content">
+                    <h3 class="title-3">Shopping Cart</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li>Shopping Cart</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="cart-main-wrapper mt-no-text">
+    <div class="container custom-area">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-lg-12 col-custom">
+                <!-- Cart Table Area -->
+                <div class="cart-table table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="pro-thumbnail">Hình ảnh</th>
+                                <th class="pro-title">Sản phẩm</th>
+                                <th class="pro-price">Giá</th>
+                                <th class="pro-quantity">Số lượng</th>
+                                <th class="pro-subtotal">Tổng cộng</th>
+                                <th class="pro-remove">Di dời</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if cart %}
+                            {% for item in cart %}
+                            <tr>
+                                <td class="pro-thumbnail"><a href="#"><img class="img-fluid" src="{% static 'assets/images/' %}{{ item.sanpham.HinhAnh }}" alt="Sản phẩm"></a></td>
+                                <td class="pro-title"><a href="#">{{item.sanpham.TenSP}}</a></td>
+                                <td class="pro-price"><span>{{item.sanpham.DonGia}}</span></td>
+                                <td class="pro-quantity">
+                                    <div class="quantity">
+                                        <div class="cart-plus-minus">
+                                            <input class="cart-plus-minus-box" name="soluong[]" value="{{item.soluong}}" type="number" min="1">
+                                            <input type="hidden" class="availableStock" value="{{ item.sanpham.Stock }}">
+                                            <div class="dec qtybutton">-</div>
+                                            <div class="inc qtybutton">+</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="pro-subtotal" id="subtotal-{{ item.id }}"><span>{{item.tong_tien}}</span></td>
+                                <td class="pro-remove"><a href="#"><i class="lnr lnr-trash"></i></a></td>
+                            </tr>
+                            {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td colspan="6"><h1 class="text-center mb-5">Không có sản phẩm nào</h1></td>
+                            </tr>
+                            {% endif %}
+                            <tr>
+                                <td colspan="4"><button type="button" id="update-cart-btn" class="btn flosun-button primary-btn rounded-0 black-btn">Cập nhật giỏ hàng</button></td>
+                                <td></td>
+                                <td><a href="index.php?page=delcart" class="btn flosun-button primary-btn rounded-0 black-btn">Xóa giỏ hàng</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Cart Update Option -->
+                <div class="cart-update-option d-block d-md-flex justify-content-between">
+                    <div class="apply-coupon-wrapper"></div>
+                    <div class="cart-update mt-sm-16"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-5 ml-auto col-custom">
+                <!-- Cart Calculation Area -->
+                <div class="cart-calculator-wrapper">
+                    <div class="cart-calculate-items">
+                        <h3>Tổng số giỏ hàng</h3>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tbody>
+            
+                                    <tr class="total">
+                                        <td>Tổng cộng</td>
+                                        <td class="total-amount">{{ tong|floatformat:"0"|default:"0" }} VNĐ</td>
+                                    </tr>
+                                    <tr>
+                                        <td> <a href="{% url 'checkout' %}" class="btn flosun-button primary-btn rounded-0 black-btn">Tiến hành đặt hàng</a></td>
+                                      
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+    // Event listener for quantity inputs
+    $(document).on('change', '.cart-plus-minus-box', function() {
+        var quantity = $(this).val();
+        var price = $(this).closest('tr').find('.pro-price span').text();
+        var subtotal = quantity * price;
+        $(this).closest('tr').find('.pro-subtotal span').text(subtotal);
+    });
+
+    // Event listener for update cart button
+    $('#update-cart-btn').on('click', function() {
+        var quantities = [];
+        $('.cart-plus-minus-box').each(function() {
+            quantities.push({
+                'item_id': $(this).closest('tr').data('item-id'),
+                'quantity': $(this).val()
+            });
+        });
+
+        $.ajax({
+            url: '/update_cart/',
+            type: 'POST',
+            data: {
+                'quantities': JSON.stringify(quantities),
+                'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
+            },
+            success: function(data) {
+                $('.total-amount').text(data.total_amount);
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText); // Log error to console
+            }
+        });
+    });
+});
+
+</script>
+{% endblock %}

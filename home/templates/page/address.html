@@ -1,6 +1,6 @@
 {% extends "pages/layout.html" %}
 {% block title %}
-Login
+Thông tin giao hàng
 {% endblock %}
 {% block content %}
 {%load static %} 
@@ -44,12 +44,12 @@ Login
                     <div class="row">
                         <div class="col-lg-3 col-md-4 col-custom">
                             <div class="myaccount-tab-menu nav" role="tablist">
-                                <a href="{% url 'my_account' %}" aria-selected="false" role="tab" ><i class="fa fa-dashboard"></i>
+                                <a href="{% url 'my_account' %}" class="active" aria-selected="true" ><i class="fa fa-dashboard"></i>
                                     <font style="vertical-align: inherit;">
                                         <font style="vertical-align: inherit;">Thêm thông tin nhận hàng</font>
                                     </font>
                                 </a>
-                                <a href="{% url 'address' %}" aria-selected="false" role="tab"><i class="fa fa-cart-arrow-down"></i>
+                                <a href="{% url 'address' %}" aria-selected="false" ><i class="fa fa-cart-arrow-down"></i>
                                     <font style="vertical-align: inherit;">
                                         <font style="vertical-align: inherit;">Địa chỉ nhận hàng </font>
                                     </font>
@@ -125,39 +125,24 @@ Login
                                     <div class="myaccount-content">
                                         <h3>
                                             <font style="vertical-align: inherit;">
-                                                <font style="vertical-align: inherit;">Chi tiết tài khoản</font>
+                                                <font style="vertical-align: inherit;">Thông tin địa chỉ giao hàng</font>
                                             </font>
                                         </h3>
-                                        <div class="account-details-form">
-                                            
-                                        </div>
-                                      
+                                        
                                             <div class="account-details-form">
-                                                <form action="" method="post">
-                                                    {% csrf_token %}
-                                                    {% for fm in form %}
-                                                        <div class="form-group">
-                                                            {{ fm.label_tag }} {{ fm }}
-                                                            <small class="text-danger">{{ fm.errors }}</small>
-                                                        </div>
-                                                    {% endfor %}
-                                                    <div class="single-input-item single-item-button">
-                                                        <button name="btnThayDoi" class="btn flosun-button secondary-btn theme-color rounded-0">Lưu</button>
-                                                    </div>
-                                                    {%if form.non_field_errors %}
-                                                        {%for error in form.non_field_errors%}
-                                                        <p class="alert alert-danger my-3">{{error}}</p>
-                                                        {% endfor %}
-                                                    {% endif %}
+                                                {%for ad in add %}
+                                                <div class="card m-2">
+                                                    <div class="card-body">
+                                                        <h3>Tên: {{ad.TenKH}}</h3>
+                                                        <p>Địa Chỉ: {{ad.DiaChi}}</p>
+                                                        <p>Điện Thoại: {{ad.DienThoai}}</p>
+                                                        <a href="#" class="btn btn-primary">Update</a>
 
-                                                    {% if messages %}
-                                                    <ul class="messages">
-                                                        {% for message in messages %}
-                                                            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                                                        {% endfor %}
-                                                    </ul>
-                                                    {% endif %}
-                                                </form>
+                                                    </div>
+
+                                                </div>
+                                                {% endfor %}
+                                            
                                             </div>
                                             
                                     
